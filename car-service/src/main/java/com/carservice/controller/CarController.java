@@ -22,12 +22,7 @@ import com.carservice.service.CarService;
 public class CarController {
 	@Autowired
 	CarService carService;
-	
-	@GetMapping("/saludo")
-	public String ver() {
-		return "Hola Mundo";
-	}
-	
+	 
 	
 	@GetMapping 
 	public ResponseEntity<List<Car>> lista() {
