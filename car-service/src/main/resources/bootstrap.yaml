@@ -1,8 +1,10 @@
-server:
-  port: 8002  
 spring:
   application:
-    name: car-service
+    name: car-service 
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
   datasource: 
     url: jdbc:mysql://localhost:3306/microservicio-examen
     username: root
