@@ -1,5 +1,6 @@
 server:
   port: 8080
+  
 eureka:
   client:
     fetch-registry: true
@@ -11,19 +12,20 @@ eureka:
     
 spring:
   cloud:
-    discovery:
-      locator:
-        enabled: true
-    routes:
-      - id: usuario-service
-        uri: lb://usuario-service
-        predicates:
-          - Path=/usuario/**
-      - id: car-service
-        uri: lb://car-service
-        predicates:
-          - Path=/car/**
-      - id: bike-service
-        uri: lb://bike-service
-        predicates:
-          -Path=/bike/**   
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: usuario-service
+          uri: lb://usuario-service
+          predicates:
+            - Path=/usuario/**
+        - id: car-service
+          uri: lb://car-service
+          predicates:
+            - Path=/car/**
+        - id: bike-service
+          uri: lb://bike-service
+          predicates:
+            -Path=/bike/**   
