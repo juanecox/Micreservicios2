@@ -56,11 +56,11 @@ public class UsuarioServiceImp implements UsuarioService{
 	//leyendo miroservicios con RestTemplate
 	public List<Car> getCars(int usuarioId)
 	{
-		return  restTemplate.getForObject("http://localhost:8002/car/byuser/" + usuarioId, List.class);
+		return  restTemplate.getForObject("http://car-service/car/byuser/" + usuarioId, List.class);
 	}
 	public List<Bike> getBikes(int usuarioId)
 	{		
-		return restTemplate.getForObject("http://localhost:8003/bike/byuser/" + usuarioId, List.class);
+		return restTemplate.getForObject("http://bike-service/bike/byuser/" + usuarioId, List.class);
 	}
 	 
     //listar llamando microservicios con FeignClient

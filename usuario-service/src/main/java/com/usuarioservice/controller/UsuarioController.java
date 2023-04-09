@@ -7,6 +7,7 @@ import java.util.Optional;
 
  
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ import com.usuarioservice.entity.Usuario;
 import com.usuarioservice.model.Bike;
 import com.usuarioservice.model.Car;
 import com.usuarioservice.service.UsuarioService;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
  
 @RestController
 @RequestMapping("/usuario")
@@ -84,6 +87,7 @@ public class UsuarioController {
 	}
 	
 	//recuperando los datos en Lista desde otros microservicios usa [RestTemplate]
+	@CircuitBreaker(name="carsCB",fallbackMethod="fallBackGetCars")
 	@GetMapping("cars/{usuarioId}")
 	public ResponseEntity<List<Car>> listarCars(@PathVariable("usuarioId") int usuarioId){
 		Optional<Usuario> user = usuarioService.getUsuarioById(usuarioId);
@@ -93,6 +97,7 @@ public class UsuarioController {
 		List<Car> cars = usuarioService.getCars(usuarioId);
 		return ResponseEntity.ok(cars);
 	}
+	@CircuitBreaker(name="bikesCB",fallbackMethod="fallBackGetBikes")
 	@GetMapping("bikes/{usuarioId}")
 	public ResponseEntity<List<Bike>> listarBikes(@PathVariable("usuarioId") int usuarioId){
 		Optional<Usuario> user = usuarioService.getUsuarioById(usuarioId);
@@ -103,6 +108,7 @@ public class UsuarioController {
 		return ResponseEntity.ok(bikes);
 	}
 	//guardando car y bikes desde el microservio usuarios usa [FeignClien]
+	@CircuitBreaker(name="carsCB",fallbackMethod="fallBackSaveCar")
 	 @PostMapping("/savecar/{usuarioId}")
 	    public ResponseEntity<Car> saveCar(@PathVariable("usuarioId") int usuarioId, @RequestBody Car car) {
 	        if(usuarioService.getUsuarioById(usuarioId) == null)
@@ -111,6 +117,7 @@ public class UsuarioController {
 	        return ResponseEntity.ok(carNew);
 	    }
 
+	  @CircuitBreaker(name="bikesCB",fallbackMethod="fallBackSaveBike")
 	    @PostMapping("/savebike/{usuarioId}")
 	    public ResponseEntity<Bike> saveBike(@PathVariable("usuarioId") int usuarioId, @RequestBody Bike bike) {
 	        if(usuarioService.getUsuarioById(usuarioId) == null)
@@ -119,13 +126,34 @@ public class UsuarioController {
 	        return ResponseEntity.ok(bikeNew);
 	    }
 	    //recuperando todos los datos desde 2 microservicios usa [FeignClien] 
-	    
+	  
+	   @CircuitBreaker(name="allCB",fallbackMethod="fallBackGetAll")  
 	    @GetMapping("/getAll/{usuarioId}")
 	    public ResponseEntity<Map<String, Object>> getAllVehicles(@PathVariable("usuarioId") int usuarioId) {
 	        Map<String, Object> result = usuarioService.getUserAndVehicles(usuarioId);
 	    	// Map<String, Object> result = new HashMap<>();
 	    	// result.put("Mensaje", "sale error");
 	        return ResponseEntity.ok(result);
+	    }
+	   
+	    private ResponseEntity<List<Car>> fallBackGetCars(@PathVariable("usuarioId") int usuarioId, RuntimeException e) {
+	        return new ResponseEntity("El usuario " + usuarioId + " tiene los coches en el taller", HttpStatus.OK);
+	    }
+
+	    private ResponseEntity<Car> fallBackSaveCar(@PathVariable("usuarioId") int usuarioId, @RequestBody Car car, RuntimeException e) {
+	        return new ResponseEntity("El usuario " + usuarioId + " no tiene dinero para coches", HttpStatus.OK);
+	    }
+
+	    private ResponseEntity<List<Bike>> fallBackGetBikes(@PathVariable("usuarioId") int usuarioId, RuntimeException e) {
+	        return new ResponseEntity("El usuario " + usuarioId + " tiene las motos en el taller", HttpStatus.OK);
+	    }
+
+	    private ResponseEntity<Car> fallBackSaveBike(@PathVariable("usuarioId") int usuarioId, @RequestBody Bike bike, RuntimeException e) {
+	        return new ResponseEntity("El usuario " + usuarioId + "  no tiene dinero para motos", HttpStatus.OK);
+	    }
+
+	    public ResponseEntity<Map<String, Object>> fallBackGetAll(@PathVariable("usuarioId") int usuarioId, RuntimeException e) {
+	        return new ResponseEntity("El usuario " + usuarioId + " tiene los vehículos en el taller", HttpStatus.OK);
 	    }
 	 
 	    
