@@ -1,6 +1,5 @@
 package com.usuarioservice.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,9 +33,26 @@ public class UsuarioController {
 	UsuarioService usuarioService;
 	
 	@GetMapping("/saludo")
-	public String ver() {
-		return "Hola Mundo";
+	public String ver() {		
+		
+		return "Hola soy usuario-service";
 	}
+	@GetMapping("/carro/{id}")
+	public List<Car> verCarro(@PathVariable("id") int id ) {
+	    List<Car> cars = usuarioService.getCars(id);
+		return cars;
+	}
+	
+	@GetMapping("carro2/{id}")
+	public ResponseEntity<List<Car>> verCarro2(@PathVariable("id") int id){
+		Optional<Usuario> user = usuarioService.getUsuarioById(id);
+		if (user.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}		
+		List<Car> cars = usuarioService.getCars(id);
+		return ResponseEntity.ok(cars);
+	}
+	
 	
 	@GetMapping() 
 	public ResponseEntity<List<Usuario>> lista() {
@@ -86,7 +102,7 @@ public class UsuarioController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	//recuperando los datos en Lista desde otros microservicios usa [RestTemplate]
+	//LISTAR desde otros microservicios usa [RestTemplate]
 	@CircuitBreaker(name="carsCB",fallbackMethod="fallBackGetCars")
 	@GetMapping("cars/{usuarioId}")
 	public ResponseEntity<List<Car>> listarCars(@PathVariable("usuarioId") int usuarioId){
@@ -107,13 +123,13 @@ public class UsuarioController {
 		List<Bike> bikes = usuarioService.getBikes(usuarioId);
 		return ResponseEntity.ok(bikes);
 	}
-	//guardando car y bikes desde el microservio usuarios usa [FeignClien]
+	//GUARDAR car y bikes desde el microservio usuarios usa [FeignClien]
 	@CircuitBreaker(name="carsCB",fallbackMethod="fallBackSaveCar")
 	 @PostMapping("/savecar/{usuarioId}")
 	    public ResponseEntity<Car> saveCar(@PathVariable("usuarioId") int usuarioId, @RequestBody Car car) {
 	        if(usuarioService.getUsuarioById(usuarioId) == null)
 	            return ResponseEntity.notFound().build();
-	        Car carNew = usuarioService .saveCar(usuarioId, car);
+	        Car carNew = usuarioService.saveCar(usuarioId, car);
 	        return ResponseEntity.ok(carNew);
 	    }
 
