@@ -113,7 +113,7 @@ public class UsuarioController {
 		List<Car> cars = usuarioService.getCars(usuarioId);
 		return ResponseEntity.ok(cars);
 	}
-	@CircuitBreaker(name="bikesCB",fallbackMethod="fallBackGetBikes")
+	@CircuitBreaker(name = "bikesCB",fallbackMethod = "fallBackGetBikes")
 	@GetMapping("bikes/{usuarioId}")
 	public ResponseEntity<List<Bike>> listarBikes(@PathVariable("usuarioId") int usuarioId){
 		Optional<Usuario> user = usuarioService.getUsuarioById(usuarioId);
@@ -124,7 +124,7 @@ public class UsuarioController {
 		return ResponseEntity.ok(bikes);
 	}
 	//GUARDAR car y bikes desde el microservio usuarios usa [FeignClien]
-	@CircuitBreaker(name="carsCB",fallbackMethod="fallBackSaveCar")
+	@CircuitBreaker(name = "carsCB", fallbackMethod = "fallBackSaveCar")
 	 @PostMapping("/savecar/{usuarioId}")
 	    public ResponseEntity<Car> saveCar(@PathVariable("usuarioId") int usuarioId, @RequestBody Car car) {
 	        if(usuarioService.getUsuarioById(usuarioId) == null)
@@ -133,7 +133,7 @@ public class UsuarioController {
 	        return ResponseEntity.ok(carNew);
 	    }
 
-	  @CircuitBreaker(name="bikesCB",fallbackMethod="fallBackSaveBike")
+	  @CircuitBreaker(name = "bikesCB", fallbackMethod = "fallBackSaveBike")
 	    @PostMapping("/savebike/{usuarioId}")
 	    public ResponseEntity<Bike> saveBike(@PathVariable("usuarioId") int usuarioId, @RequestBody Bike bike) {
 	        if(usuarioService.getUsuarioById(usuarioId) == null)
@@ -141,9 +141,9 @@ public class UsuarioController {
 	        Bike bikeNew = usuarioService.saveBike(usuarioId, bike);
 	        return ResponseEntity.ok(bikeNew);
 	    }
-	    //recuperando todos los datos desde 2 microservicios usa [FeignClien] 
 	  
-	   @CircuitBreaker(name="allCB",fallbackMethod="fallBackGetAll")  
+	    //LISTAR TODOS los datos desde 2 microservicios usa [FeignClien]	  
+	   @CircuitBreaker(name="allCB", fallbackMethod = "fallBackGetAll")  
 	    @GetMapping("/getAll/{usuarioId}")
 	    public ResponseEntity<Map<String, Object>> getAllVehicles(@PathVariable("usuarioId") int usuarioId) {
 	        Map<String, Object> result = usuarioService.getUserAndVehicles(usuarioId);
