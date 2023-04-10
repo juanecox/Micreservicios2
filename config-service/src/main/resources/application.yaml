@@ -10,8 +10,3 @@ spring:
           search-paths: config-data
   application:
     name: config-service
-    
-#notas
-#default-label es la rama
-#application name es el nomre de este proyecto de configuracion
-#serach-path ahi se encuentran los archivos de configuracion de cada microservicio

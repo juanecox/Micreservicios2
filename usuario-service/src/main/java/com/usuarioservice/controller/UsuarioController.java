@@ -118,7 +118,7 @@ public class UsuarioController {
 	public ResponseEntity<List<Bike>> listarBikes(@PathVariable("usuarioId") int usuarioId){
 		Optional<Usuario> user = usuarioService.getUsuarioById(usuarioId);
 		if (user.isEmpty()) {
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.notFound().build();
 		}		
 		List<Bike> bikes = usuarioService.getBikes(usuarioId);
 		return ResponseEntity.ok(bikes);
@@ -153,23 +153,23 @@ public class UsuarioController {
 	    }
 	   
 	    private ResponseEntity<List<Car>> fallBackGetCars(@PathVariable("usuarioId") int usuarioId, RuntimeException e) {
-	        return new ResponseEntity("El usuario " + usuarioId + " tiene los coches en el taller", HttpStatus.OK);
+	        return new ResponseEntity("El usuario : " + usuarioId + " tiene los coches en el taller", HttpStatus.OK);
 	    }
 
 	    private ResponseEntity<Car> fallBackSaveCar(@PathVariable("usuarioId") int usuarioId, @RequestBody Car car, RuntimeException e) {
-	        return new ResponseEntity("El usuario " + usuarioId + " no tiene dinero para coches", HttpStatus.OK);
+	        return new ResponseEntity("El usuario : " + usuarioId + " no tiene dinero para coches", HttpStatus.OK);
 	    }
 
 	    private ResponseEntity<List<Bike>> fallBackGetBikes(@PathVariable("usuarioId") int usuarioId, RuntimeException e) {
-	        return new ResponseEntity("El usuario " + usuarioId + " tiene las motos en el taller", HttpStatus.OK);
+	        return new ResponseEntity("El usuario : " + usuarioId + " tiene las motos en el taller", HttpStatus.OK);
 	    }
 
 	    private ResponseEntity<Car> fallBackSaveBike(@PathVariable("usuarioId") int usuarioId, @RequestBody Bike bike, RuntimeException e) {
-	        return new ResponseEntity("El usuario " + usuarioId + "  no tiene dinero para motos", HttpStatus.OK);
+	        return new ResponseEntity("El usuario : " + usuarioId + "  no tiene dinero para motos", HttpStatus.OK);
 	    }
 
 	    public ResponseEntity<Map<String, Object>> fallBackGetAll(@PathVariable("usuarioId") int usuarioId, RuntimeException e) {
-	        return new ResponseEntity("El usuario " + usuarioId + " tiene los vehículos en el taller", HttpStatus.OK);
+	        return new ResponseEntity("El usuario : " + usuarioId + " tiene los vehículos en el taller", HttpStatus.OK);
 	    }
 	 
 	    
