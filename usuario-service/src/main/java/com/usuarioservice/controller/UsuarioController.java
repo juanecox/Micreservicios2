@@ -108,7 +108,7 @@ public class UsuarioController {
 	public ResponseEntity<List<Car>> listarCars(@PathVariable("usuarioId") int usuarioId){
 		Optional<Usuario> user = usuarioService.getUsuarioById(usuarioId);
 		if (user.isEmpty()) {
-			return ResponseEntity.noContent().build();
+			return ResponseEntity.notFound().build();
 		}		
 		List<Car> cars = usuarioService.getCars(usuarioId);
 		return ResponseEntity.ok(cars);
