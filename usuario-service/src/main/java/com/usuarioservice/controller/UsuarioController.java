@@ -31,7 +31,7 @@ public class UsuarioController {
 	
 	@Autowired
 	UsuarioService usuarioService;
-	
+	/*********apis de prueba**********/
 	@GetMapping("/saludo")
 	public String ver() {		
 		
@@ -52,7 +52,7 @@ public class UsuarioController {
 		List<Car> cars = usuarioService.getCars(id);
 		return ResponseEntity.ok(cars);
 	}
-	
+	/*******finde apis de prueba*********/
 	
 	@GetMapping() 
 	public ResponseEntity<List<Usuario>> lista() {
