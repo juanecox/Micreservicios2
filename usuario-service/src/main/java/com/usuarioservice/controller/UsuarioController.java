@@ -32,6 +32,7 @@ public class UsuarioController {
 	@Autowired
 	UsuarioService usuarioService;
 	/*********apis de prueba**********/
+	
 	@GetMapping("/saludo")
 	public String ver() {		
 		
