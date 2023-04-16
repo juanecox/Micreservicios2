@@ -22,15 +22,13 @@ import com.carservice.service.CarService;
 public class CarController {
 	@Autowired
 	CarService carService;
-	 
-	
+	 	
 	@GetMapping 
 	public ResponseEntity<List<Car>> lista() {
 		List<Car> cars = carService.getCarAll();
 	 	if (cars.isEmpty()) {
 			return ResponseEntity.noContent().build();
-		}
-		 
+		}		 
 		return ResponseEntity.ok(cars);
 	}
 

@@ -23,6 +23,10 @@ spring:
             - Path=/usuario/**
           filters:
             - AuthFilter
+        - id: rentas-service
+          uri: lb://rentas-service
+          predicates:
+            - Path=/alumno/**    
         - id: car-service
           uri: lb://car-service
           predicates:
