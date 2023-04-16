@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          default-label: auth-jwt-role
+          default-label: rentas
           uri: https://github.com/juanecox/MicreserviciosV2
           search-paths: config-data
   application:

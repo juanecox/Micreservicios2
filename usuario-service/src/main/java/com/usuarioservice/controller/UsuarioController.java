@@ -27,8 +27,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
-	
-	
+		
 	@Autowired
 	UsuarioService usuarioService;
 	/*********apis de prueba**********/
