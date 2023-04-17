@@ -27,6 +27,8 @@ spring:
           uri: lb://rentas-service
           predicates:
             - Path=/alumno/**
+          filters:
+            - AuthFilter
         - id: car-service
           uri: lb://car-service
           predicates:
