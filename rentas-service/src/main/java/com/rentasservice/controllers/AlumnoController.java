@@ -2,6 +2,7 @@ package com.rentasservice.controllers;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,20 +30,29 @@ import com.rentasservice.entity.Alumno;
 import com.rentasservice.services.AlumnoService;
  
 @RestController
-@RequestMapping("/alumnos")
+@RequestMapping("/alumno")
 public class AlumnoController {
 	@Autowired
 	private AlumnoService service; 
 	
-	@GetMapping("/hola")
-	public String saludo(){
+	
+	@GetMapping("/saludo")
+	public String ver() {
 		return "Hola Carnal :)";
 	}
 	
 	@GetMapping
+	public ResponseEntity<List<Alumno>> lista() {
+		List<Alumno> cars = (List<Alumno>) service.findAll();
+	 	if (cars.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}		 
+		return ResponseEntity.ok(cars);
+	}
+	/*
 	public ResponseEntity<?> listar(){
 		return ResponseEntity.ok().body(service.findAll());
-	}
+	}*/
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> ver(@PathVariable Long id){
@@ -77,9 +87,8 @@ public class AlumnoController {
 		return ResponseEntity.ok()
 				.contentType(MediaType.IMAGE_JPEG)
 				.body(imagen);
-	}
-	
-		
+	}	
+ 
 	private ResponseEntity<?> validar(BindingResult result){
 		Map<String, Object> errores = new HashMap<>();
 		result.getFieldErrors().forEach(err -> {
@@ -150,5 +159,5 @@ public class AlumnoController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(alumnoDb));
 	}
-
+ 
 }
