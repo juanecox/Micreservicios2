@@ -10,7 +10,7 @@ eureka:
   instance:
     hostname: localhost
 
-springx:
+spring:
   cloud:
     gateway:
       discovery:
